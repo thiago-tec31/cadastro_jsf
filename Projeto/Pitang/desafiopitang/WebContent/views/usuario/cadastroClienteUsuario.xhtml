@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+</h:head>
+
+<ui:composition template="/template/base.xhtml">
+
+	<ui:define name="content">
+	
+		<!-- Dialog p/ inserção e edição telefone -->
+		<p:dialog id="itemDialog" widgetVar="itemDialog" modal="true" header="Cadastro de Telefone">			 
+			<h:form>
+				<p:panelGrid columns="2" >
+					
+					<h:outputLabel value="DDD: " />
+	    			<h:inputText id="nomeUsuario" value="#{usuarioBean.telefone.ddd}"/>
+	    		
+	    			<h:outputLabel value="NÚMERO: " />
+	    			<h:inputText id="emailUsuario" value="#{usuarioBean.telefone.numero}"/>
+	    				
+	    			<h:outputLabel value="TIPO: " />
+	    			<h:inputText id="senhaUsuario" value="#{usuarioBean.telefone.tipo}"/>
+	    				
+	    			<h:commandButton value="Salvar"  ajax="true" actionListener="#{usuarioBean.registraTelefone}"/>
+	    				
+				</p:panelGrid>						
+			</h:form>							
+		</p:dialog>	
+	
+		<!-- Dialog p/ inserção e edição usuário -->
+		<p:dialog header="Cadastro de usuário" modal="true" id="dialog-modal-editar" 
+				  widgetVar="dialog-modal-editar" height="300px" width="700px">  
+    		<h:form>
+				<h:panelGrid columns="2">
+	
+					<h:outputLabel value="Nome: " />
+	    			<h:inputText id="nomeUsuario" value="#{usuarioBean.usuario.nome}"/>
+	    
+	    			<h:outputLabel value="Email: " />
+	    			<h:inputText id="emailUsuario" value="#{usuarioBean.usuario.email}"/>
+	    
+	    			<h:outputLabel value="Senha: " />
+	    			<h:inputText id="senhaUsuario" value="#{usuarioBean.usuario.senha}"/>
+	    	
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+			
+					<p:commandButton value="Adicionar Telefone"
+						ajax="true" actionListener="#{usuarioBean.novoTelefone}"
+						oncomplete="PF('itemDialog').show()" />
+							
+					<p:dataTable id="itensTable" value="#{lancamentoBean.itensLancamento}" var="item">
+						<p:column headerText="DDD">
+							<h:outputText value="#{item.codigo}"/>
+						</p:column>
+						<p:column headerText="Número">
+							<h:outputText value="#{item.codigo}"/>
+						</p:column>
+						<p:column headerText="Tipo">
+							<h:outputText value="#{item.codigo}"/>
+						</p:column>
+	               </p:dataTable>
+	 		 	
+	 		 	</h:panelGrid>
+	 		 	
+	 		 	<h:panelGrid columns="2">
+	
+					<h:commandButton id="salvarUsuario" value="Salvar" ajax="true" actionListener="#{usuarioBean.salvar}"/>
+	    	
+				</h:panelGrid>
+	
+			</h:form>
+    	
+		</p:dialog>
+	
+		<h:form style="width:50%">
+		
+			<p:toolbar style="margin-bottom:2px;">
+				<f:facet name="left">				
+		            <p:commandButton value="Novo Usuário" style="width:100%;" ajax="true" oncomplete="PF('dialog-modal-editar').show();" />
+		        </f:facet>
+		 	</p:toolbar>
+		
+			<h:dataTable value="#{usuarioBean.usuarios}" style="width:100%" var="u" border="1">
+		
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="ID" /> 
+					</f:facet>
+					<h:outputText value="#{u.id}" />
+				</h:column>
+			
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="NOME" /> 
+					</f:facet>
+					<h:outputText value="#{u.nome}" />
+				</h:column>
+			
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="EMAIL" /> 
+					</f:facet>
+					<h:outputText value="#{u.email}" />
+				</h:column>
+			
+				<h:column>
+					<p:commandButton value="Editar" style="width:100%;" ajax="true" actionListener="#{usuarioBean.editar(u)}" oncomplete="PF('dialog-modal-editar').show();" update="dialog-modal-editar" />
+				</h:column>
+			
+				<h:column>
+					<p:commandButton value="Excluir" style="width:100%;" ajax="true" actionListener="#{usuarioBean.excluir(u)}" update="@form"  />
+				</h:column>
+		
+			</h:dataTable>
+	
+		</h:form>
+	
+	</ui:define>
+
+</ui:composition>
+	
+	
+</html>

@@ -1,0 +1,54 @@
+package dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+public class DaoGeneric<E> implements IDaoGeneric<E> {
+	
+	private static final long serialVersionUID = 3841704315238006119L;
+
+	@Override
+	public E merge(E entidade) {
+		EntityManager entityManager = JPAUtil.getEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		
+		E retorno = entityManager.merge(entidade);
+		
+		entityTransaction.commit();
+		entityManager.close();
+		
+		return retorno;
+	}
+	
+	@Override
+	public void deletePorID(E entidade) {
+		EntityManager entityManager = JPAUtil.getEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		
+		Object id = JPAUtil.getPrimaryKey(entidade); 
+		entityManager.createQuery("delete from " + entidade.getClass().getCanonicalName() + " where id = " + id).executeUpdate();
+		
+		entityTransaction.commit();
+		entityManager.close();
+	}
+	
+	@Override
+	public List<E> getListEntidade(E entidade) {
+		EntityManager entityManager = JPAUtil.getEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		
+		List<E> retorno = entityManager.createQuery("from " + entidade.getClass().getCanonicalName()).getResultList();
+		
+		entityTransaction.commit();
+		entityManager.close();
+		
+		return retorno;
+	}
+	
+
+}
